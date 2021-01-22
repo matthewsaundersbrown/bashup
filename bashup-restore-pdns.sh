@@ -6,8 +6,6 @@
 
 # backup directory
 backup_storage_dir='/mnt/backups';
-# config file that contains [client] config with 'host' 'user' 'password' settings
-defaults_extra_file='/etc/mysql/debian.cnf';
 
 # check for local config, which can be used to override any of the above
 if [[ -f /usr/local/etc/bashup.cnf ]]; then
@@ -23,19 +21,19 @@ help()
   echo ""
   echo "Restore database from backup."
   echo ""
-  echo "Usage: $thisfilename [-b BACKUPDATE] [-d DATABASE]"
+  echo "Usage: $thisfilename [-b BACKUPDATE] [-z ZONE]"
   echo ""
   echo "  -b BACKUPDATE Backup date/archive to restore from."
-  echo "  -d DATABASE   Database to restore."
+  echo "  -z ZONE       DNS Zone to restore."
   echo "  -h            Print this help."
   echo "                You will be prompted to select backup date and/or"
-  echo "                database name from a list of available options"
+  echo "                zone name from a list of available options"
   echo "                if they are not specified on the command line."
   exit
 }
 
 # set any options that were passed
-while getopts "b:d:h" opt; do
+while getopts "b:z:h" opt; do
   case "${opt}" in
     h )
       help
@@ -43,8 +41,8 @@ while getopts "b:d:h" opt; do
     b )
       backup=${OPTARG}
       ;;
-    d )
-      database=${OPTARG}
+    z )
+      zone=${OPTARG}
       ;;
     \? )
       echo "Invalid option: $OPTARG" 1>&2
@@ -96,46 +94,46 @@ if [ -z "$backup" ] ; then
   done
 fi
 
-# set dump if database was set via command option
-if [ ! -z "$database" ] ; then
-  dump="$database.sql.gz"
+# set zone_file
+if [ ! -z "$zone" ] ; then
+  zone_file="$zone.zone"
 else
-  if [ -d $backup_storage_dir/$backup/mysql ]; then
-    # get list of dbs in backup
-    existing_dumps=($(ls $backup_storage_dir/$backup/mysql))
-    # set array with names of dbs (without .sql.gz suffix)
-    declare -a existing_dumps_db_names
-    for existing_dump in "${existing_dumps[@]}"; do
-      existing_dumps_db_name="$(basename $existing_dump .sql.gz)"
-      existing_db_names+=("$existing_dumps_db_name")
+  if [ -d $backup_storage_dir/$backup/pdns ]; then
+    # get list of zones in backup
+    existing_zones=($(ls $backup_storage_dir/$backup/pdns))
+    # set array with names of zones (without .zone suffix)
+    declare -a existing_zone_names
+    for existing_zone in "${existing_zones[@]}"; do
+      existing_zone_name="$(basename $existing_zone .zone)"
+      existing_zone_names+=("$existing_zone_name")
     done
-    # select database dump to restore
-    PS3="Select number of database to restore: "
-    existing_db_names_len=${#existing_db_names[@]}
-    select database in ${existing_db_names[@]}
+    # select zone dump to restore
+    PS3="Select number of zone to restore: "
+    existing_zone_names_len=${#existing_zone_names[@]}
+    select zone in ${existing_zone_names[@]}
     do
-      if [[ $REPLY -gt 0 ]] && [[ $REPLY -le $existing_db_names_len ]]; then
-        dump=$database.sql.gz
+      if [[ $REPLY -gt 0 ]] && [[ $REPLY -le $existing_zone_names_len ]]; then
+        zone_file=$zone.zone
         break
       else
         echo "ERROR: Invalid entry, try again."
       fi
     done
   else
-    echo "ERROR: Backup dir for $backup/mysql/  does not exist."
+    echo "ERROR: Backup dir for $backup/pdns/ does not exist."
     exit 1
   fi
 fi
 
 # check that dump exists and restore it now
 if [ -d $backup_storage_dir/$backup ]; then
-  if [ -f $backup_storage_dir/$backup/mysql/$dump ]; then
+  if [ -f $backup_storage_dir/$backup/pdns/$zone_file ]; then
     # Still in testing mode, display command instead of running it
-    echo "To restore database $database from backup $backup run this command:"
-    echo "/usr/bin/zcat $backup_storage_dir/$backup/mysql/$dump | mysql --defaults-extra-file=$defaults_extra_file $database"
-#     echo "SUCCESS: Database $database from backup $backup has been restored."
+    echo "To restore zone $zone from backup $backup run this command:"
+    echo "/usr/bin/pdnsutil load-zone $zone $backup_storage_dir/$backup/pdns/$zone_file"
+#     echo "SUCCESS: Zone $zone from backup $backup has been restored."
   else
-    echo "ERROR: Dump for database $database does not exist in the $backup backup dir."
+    echo "ERROR: Zone file for zone $zone does not exist in the $backup backup dir."
     exit 1
   fi
 else

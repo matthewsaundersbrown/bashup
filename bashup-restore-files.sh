@@ -17,10 +17,13 @@ fi
 help()
 {
   thisfilename=$(basename -- "$0")
-  echo "$thisfilename"
+  echo "Bashup - A set of bash scripts for managing backups."
+  echo "https://git.stack-source.com/msb/bashup"
+  echo "MIT License Copyright (c) 2021 Matthew Saunders Brown"
+  echo ""
   echo "Restore file(s) from backup."
   echo ""
-  echo "usage: $thisfilename [-b BACKUPDATE] [-f PATH]"
+  echo "Usage: $thisfilename [-b BACKUPDATE] [-p PATH]"
   echo ""
   echo "  -b BACKUPDATE Backup date/archive to restore from."
   echo "  -p PATH       Path to file or directory to restore."
@@ -30,6 +33,27 @@ help()
   echo "                with the above options."
   exit
 }
+
+# set any options that were passed
+while getopts "b:p:h" opt; do
+  case "${opt}" in
+    h )
+      help
+      exit;;
+    b )
+      backup=${OPTARG}
+      ;;
+    p )
+      pathtorestore=${OPTARG}
+      ;;
+    \? )
+      echo "Invalid option: $OPTARG" 1>&2
+      exit 1;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      exit 1;;
+  esac
+done
 
 if [ ! -d $backup_storage_dir ]; then
   echo "ERROR: Backup storage dir ($backup_storage_dir) does not exist."
@@ -52,27 +76,6 @@ if [ $? -eq 0 ]; then
     fi
   fi
 fi
-
-# set any options that were passed
-while getopts "b:p:h" opt; do
-  case "${opt}" in
-    h )
-      help
-      exit;;
-    b )
-      backup=${OPTARG}
-      ;;
-    p )
-      pathtorestore=${OPTARG}
-      ;;
-    \? )
-      echo "Invalid option: $OPTARG" 1>&2
-      exit 1;;
-    : )
-      echo "Invalid option: $OPTARG requires an argument" 1>&2
-      exit 1;;
-  esac
-done
 
 # get list of backups (dates)
 existing_backups=($(ls $backup_storage_dir|grep -v lost+found))
