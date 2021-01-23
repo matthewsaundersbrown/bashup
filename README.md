@@ -2,6 +2,20 @@
 
 A set of bash scripts for managing backups.
 
+## Overview
+
+Bashup includes scripts for backing up & restoring Files/Directories, MySQL databases, and PowerDNS zones.
+
+The scripts assume a mountable backup disk (cloud based block storage, NFS mount, etc.) but works equally well with a local partition or a local backup directory. If the backup dir is configured in /etc/fstab as a mountable disk then it will automatically be mounted and then unmounted when the scripts run.
+
+For "files" backups a combination of rsync & hard links is used. This conserves space as for files that are unchanged simply reference the same indode instead of having duplicate files.
+
+It is intended that each of the desired "backup" scripts is run once a day via cron. They scripts can be re-run multiple times in one day without any negative repercussions. If an existing backup already exists it is simply skipped, it is not overwritten with a newer copy.
+
+The "restore" scripts can be run interatively. If you do not specify options for the restore then you will be prompted with menus of options to help you select what to restore. If the appropriate options are specified on the command line then the restore will be completed wihtout prompts.
+
+Built and tested on Ubuntu 20.04 these scripts should run fine on any recent Debian or Debian based distro without any modifications. It should be trivial to expand support for other distros too, please contact the author if there is interest in this.
+
 ## Quickstart
 
 Create a backup directory or mount. For example, make a directory named /mnt/backups and create an NFS mount for that directory.
