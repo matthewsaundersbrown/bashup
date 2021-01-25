@@ -14,6 +14,12 @@ if [[ -f /usr/local/etc/bashup.cnf ]]; then
   source /usr/local/etc/bashup.cnf
 fi
 
+# require root
+if [ "${EUID}" -ne 0 ]; then
+  echo "This script must be run as root"
+  exit 1
+fi
+
 help()
 {
   thisfilename=$(basename -- "$0")

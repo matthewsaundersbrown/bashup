@@ -19,6 +19,12 @@ if [[ -f /usr/local/etc/bashup.cnf ]]; then
   source /usr/local/etc/bashup.cnf
 fi
 
+# require root
+if [ "${EUID}" -ne 0 ]; then
+  echo "This script must be run as root"
+  exit 1
+fi
+
 if [ ! -d $backup_storage_dir ]; then
   echo "ERROR: Backup storage dir ($backup_storage_dir) does not exist."
   exit 1
