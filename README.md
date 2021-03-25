@@ -6,7 +6,7 @@ A set of bash scripts for managing backups.
 
 Bashup includes scripts for backing up & restoring Files/Directories, MySQL databases, and PowerDNS zones.
 
-The scripts assume a mountable backup disk (cloud based block storage, NFS mount, dedicated local partion, etc.) but work equally a local backup directory. If the backup dir is configured in /etc/fstab as a mountable disk then it will automatically be mounted and then unmounted when the scripts run.
+The scripts assume a mountable backup disk (cloud based block storage, NFS mount, dedicated local partion, etc.) but work equally well with a local backup directory. If the backup dir is configured in /etc/fstab as a mountable disk then it will automatically be mounted and then unmounted when the scripts run.
 
 For "files" backups a combination of rsync & hard links is used. This conserves space as files that are unchanged simply reference the same indode instead of having duplicate files.
 
@@ -26,13 +26,13 @@ wget https://git.stack-source.com/msb/bashup/archive/master.tar.gz -O bashup.tar
 tar zxvf bashup.tar.gz
 cd bashup
 cp bashup-*.sh /usr/local/sbin/
-chmod 750 /usr/local/sbin/bashup-*.sh
+chmod 755 /usr/local/sbin/bashup-*.sh
 chown root:root /usr/local/sbin/bashup-*.sh
 nano /usr/local/etc/bashup.cnf
 crontab -e
 ```
 
-The "nano /usr/local/etc/bashup.cnf" command is optional. Do this if you need to override any of the settings at the top of the bashup scripts.
+The "nano /usr/local/etc/bashup.cnf" command is optional. Do this if you need to override any of the settings found at the top of the various bashup scripts.
 
 For the crontab add an entry for each of the "backup" scripts that you'd like to run. For example, to back up files at 3:01 am every day add this crontab:
 
