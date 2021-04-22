@@ -125,7 +125,7 @@ fi
 
 # perform restore
 # Still in testing mode, display command instead of running it
-"To restore $pathtorestore from $backup run this command:"
+echo "To restore $pathtorestore from $backup run this command:"
 echo "/usr/bin/rsync -vn --archive --numeric-ids --one-file-system --delete $pathtobackup $pathtorestore"
 
 bashup::unmount_storage_dir
