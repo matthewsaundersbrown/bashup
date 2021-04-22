@@ -25,14 +25,14 @@ cd /usr/local/src/
 wget https://git.stack-source.com/msb/bashup/archive/master.tar.gz -O bashup.tar.gz
 tar zxvf bashup.tar.gz
 cd bashup
-cp bashup-*.sh /usr/local/sbin/
-chmod 755 /usr/local/sbin/bashup-*.sh
-chown root:root /usr/local/sbin/bashup-*.sh
-nano /usr/local/etc/bashup.cnf
+cp bashup*.sh /usr/local/sbin/
+chmod 755 /usr/local/sbin/bashup*.sh
+chown root:root /usr/local/sbin/bashup*.sh
+nano /usr/local/sbing/bashup.cnf
 crontab -e
 ```
 
-The "nano /usr/local/etc/bashup.cnf" command is optional. Do this if you need to override any of the settings found at the top of the various bashup scripts.
+The "nano /usr/local/sbin/bashup.cnf" command is optional. Do this if you need to override any of the configurable settings found at the top of the script.
 
 For the crontab add an entry for each of the "backup" scripts that you'd like to run. For example, to back up files at 3:01 am every day add this crontab:
 

@@ -4,21 +4,8 @@
 # https://git.stack-source.com/msb/bashup
 # MIT License Copyright (c) 2021 Matthew Saunders Brown
 
-# backup storage directory
-backup_storage_dir='/mnt/backups';
-# directories to be backed up
-backup_dirs=('/etc' '/home' '/srv' '/root' '/usr/local' '/var/www');
-
-# check for local config, which can be used to override any of the above
-if [[ -f /usr/local/etc/bashup.cnf ]]; then
-  source /usr/local/etc/bashup.cnf
-fi
-
-# require root
-if [ "${EUID}" -ne 0 ]; then
-  echo "This script must be run as root"
-  exit 1
-fi
+# load include file
+source $(dirname $0)/bashup.sh
 
 help()
 {
@@ -61,30 +48,7 @@ while getopts "b:p:h" opt; do
   esac
 done
 
-if [ ! -d $backup_storage_dir ]; then
-  echo "ERROR: Backup storage dir ($backup_storage_dir) does not exist."
-  exit 1
-fi
-
-# check if backup_storage_dir is a mount in fstab
-grep -qs " $backup_storage_dir " /etc/fstab
-if [ $? -eq 0 ]; then
-  # check if backup_storage_dir is already mounted
-  grep -qs " $backup_storage_dir " /proc/mounts
-  if [ $? -ne 0 ]; then
-    # attempt to mount backups
-    mount $backup_storage_dir
-    # re-check for backups mount
-    grep -qs " $backup_storage_dir " /proc/mounts
-    if [ $? -ne 0 ]; then
-      echo "ERROR: failed to mount $backup_storage_dir"
-      exit 1
-    fi
-  fi
-fi
-
-# get list of backups (dates)
-existing_backups=($(ls $backup_storage_dir|grep -v lost+found))
+bashup::set_existing_backups
 
 # prompt if backup was not set on command line
 if [ -z "$backup" ] ; then
@@ -164,10 +128,6 @@ fi
 "To restore $pathtorestore from $backup run this command:"
 echo "/usr/bin/rsync -vn --archive --numeric-ids --one-file-system --delete $pathtobackup $pathtorestore"
 
-# check if backup_storage_dir is mounted and unmount if so
-/usr/bin/grep -qs " $backup_storage_dir " /proc/mounts
-if [ $? -eq 0 ]; then
-  /usr/bin/umount $backup_storage_dir
-fi
+bashup::unmount_storage_dir
 
 exit 0
