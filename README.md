@@ -28,7 +28,7 @@ cd bashup
 cp bashup*.sh /usr/local/sbin/
 chmod 755 /usr/local/sbin/bashup*.sh
 chown root:root /usr/local/sbin/bashup*.sh
-nano /usr/local/sbing/bashup.cnf
+nano /usr/local/sbin/bashup.sh
 crontab -e
 ```
 
