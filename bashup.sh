@@ -4,9 +4,7 @@
 # https://git.stack-source.com/msb/bashup
 # MIT License Copyright (c) 2021 Matthew Saunders Brown
 
-#
 # begin configurable vars
-#
 
 # retention vars
 retention_years=0;
@@ -26,9 +24,12 @@ defaults_extra_file='/etc/mysql/debian.cnf';
 # list of mysql databases to skip
 exclusions=('information_schema' 'performance_schema' 'sys' 'wsrep');
 
-#
 # end configurable vars
-#
+
+# check for local config, which can be used to override any of the above
+if [[ -f /usr/local/etc/bashup.conf ]]; then
+  source /usr/local/etc/bashup.conf
+fi
 
 # must be root, attempt sudo if need be
 if [ "${EUID}" -ne 0 ]; then

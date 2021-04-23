@@ -32,7 +32,7 @@ nano /usr/local/sbin/bashup.sh
 crontab -e
 ```
 
-The "nano /usr/local/sbin/bashup.cnf" command is optional. Do this if you need to override any of the configurable settings found at the top of the script.
+The "nano /usr/local/sbin/bashup.conf" command is optional. Do this if you need to override any of the configurable settings found at the top of the bashup.sh script.
 
 For the crontab add an entry for each of the "backup" scripts that you'd like to run. For example, to back up files at 3:01 am every day add this crontab:
 
