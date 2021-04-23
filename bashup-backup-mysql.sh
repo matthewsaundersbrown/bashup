@@ -43,32 +43,7 @@ if [[ " ${retention_array[@]} " =~ " ${today} " ]]; then
 
 fi
 
-# remove expired backups
-for existing_backup in "${existing_backups[@]}"; do
-
-  if [[ " ${retention_array[@]} " =~ " ${existing_backup} " ]]; then
-
-    # keep $existing_backup, do nothing
-    one=1;
-
-  else
-
-    if [[ -d $backup_storage_dir/$existing_backup/mysql ]]; then
-
-      rm -r $backup_storage_dir/$existing_backup/mysql
-
-    fi
-
-    if [ -z "$(ls -A $backup_storage_dir/$existing_backup)" ]; then
-
-      rm -r $backup_storage_dir/$existing_backup
-
-    fi
-
-  fi
-
-done
-
+bashup::remove_expired_backups mysql
 bashup::unmount_storage_dir
 
 exit 0

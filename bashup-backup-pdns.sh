@@ -36,32 +36,7 @@ if [[ " ${retention_array[@]} " =~ " ${today} " ]]; then
 
 fi
 
-# remove expired backups
-for existing_backup in "${existing_backups[@]}"; do
-
-  if [[ " ${retention_array[@]} " =~ " ${existing_backup} " ]]; then
-
-    # keep $existing_backup, do nothing
-    one=1;
-
-  else
-
-    if [[ -d $backup_storage_dir/$existing_backup/pdns ]]; then
-
-      rm -r $backup_storage_dir/$existing_backup/pdns
-
-    fi
-
-    if [ -z "$(ls -A $backup_storage_dir/$existing_backup)" ]; then
-
-      rm -r $backup_storage_dir/$existing_backup
-
-    fi
-
-  fi
-
-done
-
+bashup::remove_expired_backups pdns
 bashup::unmount_storage_dir
 
 exit 0

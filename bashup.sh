@@ -116,6 +116,55 @@ function bashup::set-retention_array () {
 
 }
 
+function bashup::remove_expired_backups () {
+
+  # check for and set directory var
+  if [ -n "$1" ]; then
+    directory=$1
+  else
+    echo "ERROR: directory var not set"
+    return 1
+  fi
+
+  # safety check, make sure retention_array is not empty
+  retention_array_len=${#retention_array[@]}
+
+  if [[ $retention_array_len -gt 0 ]]; then
+
+    for existing_backup in "${existing_backups[@]}"; do
+
+      if [[ " ${retention_array[@]} " =~ " ${existing_backup} " ]]; then
+
+        # keep $existing_backup, do nothing
+        one=1;
+
+      else
+
+        if [[ -d $backup_storage_dir/$existing_backup/$directory ]]; then
+
+          echo rm -r $backup_storage_dir/$existing_backup/$directory
+
+        fi
+
+        if [[ -z "$(ls -A $backup_storage_dir/$existing_backup)" ]]; then
+
+          echo rm -r $backup_storage_dir/$existing_backup
+
+        fi
+
+      fi
+
+    done
+
+  else
+
+    echo "WARNING: retention array empty or not set."
+    return 1
+
+  fi
+
+}
+
 function bashup::unmount_storage_dir () {
   # check if backup_storage_dir is mounted and unmount if so
   grep -qs " $backup_storage_dir " /proc/mounts
