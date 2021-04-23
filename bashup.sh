@@ -143,13 +143,13 @@ function bashup::remove_expired_backups () {
 
         if [[ -d $backup_storage_dir/$existing_backup/$directory ]]; then
 
-          echo rm -r $backup_storage_dir/$existing_backup/$directory
+          rm -r $backup_storage_dir/$existing_backup/$directory
 
         fi
 
         if [[ -z "$(ls -A $backup_storage_dir/$existing_backup)" ]]; then
 
-          echo rm -r $backup_storage_dir/$existing_backup
+          rm -r $backup_storage_dir/$existing_backup
 
         fi
 
