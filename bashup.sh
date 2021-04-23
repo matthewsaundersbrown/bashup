@@ -70,9 +70,9 @@ if [[ "$0" == *"-backup-"* ]];then
   fi
 fi
 
-function bashup::set_retention_array () {
+function bashup::set-retention_array () {
 
-  declare -a retention_array
+  declare -a -g retention_array
 
   # set retention days
   if [ $retention_days -gt 0 ]; then

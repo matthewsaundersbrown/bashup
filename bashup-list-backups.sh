@@ -92,7 +92,9 @@ if [ ! -z "$backup" ]; then
   fi
 else
   # output list of backups (dates)
-  ls -1 $backup_storage_dir | grep -v lost+found
+  for existing_backup in "${existing_backups[@]}"; do
+    echo $existing_backup
+  done
 fi
 
 bashup::unmount_storage_dir

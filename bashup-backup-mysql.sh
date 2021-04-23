@@ -7,8 +7,7 @@
 # load include file
 source $(dirname $0)/bashup.sh
 
-bashup::set_existing_backups
-bashup::set_retention_array
+bashup::set-retention_array
 
 # create backup for today
 if [[ " ${retention_array[@]} " =~ " ${today} " ]]; then
