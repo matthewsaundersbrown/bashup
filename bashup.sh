@@ -16,7 +16,7 @@ retention_days=7;
 backup_storage_dir='/mnt/backups';
 
 # directories to be backed up by files
-backup_dirs=('/etc' '/home' '/srv' '/root' '/usr/local' '/var/www');
+backup_dirs=('/etc' '/home' '/root' '/srv' '/usr/local' '/var/www');
 
 # mysql config file that contains 'host' 'user' 'password' vars
 defaults_extra_file='/etc/mysql/debian.cnf';
