@@ -28,11 +28,11 @@ cd bashup
 cp bashup*.sh /usr/local/sbin/
 chmod 755 /usr/local/sbin/bashup*.sh
 chown root:root /usr/local/sbin/bashup*.sh
-nano /usr/local/sbin/bashup.sh
+nano /usr/local/etc/bashup.conf
 crontab -e
 ```
 
-The "nano /usr/local/sbin/bashup.conf" command is optional. Do this if you need to override any of the configurable settings found at the top of the bashup.sh script.
+The "nano /usr/local/etc/bashup.conf" command is optional. Do this if you need to override any of the default configurable settings found at the top of the /usr/local/sbin/bashup.sh script.
 
 For the crontab add an entry for each of the "backup" scripts that you'd like to run. For example, to back up files at 3:01 am every day add this crontab:
 
