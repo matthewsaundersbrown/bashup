@@ -15,6 +15,9 @@ retention_days=7;
 # backup storage directory
 backup_storage_dir='/mnt/backups';
 
+# which backup scripts to run via bashup-cron.sh - options are 'files', 'mysql', 'pdns'
+bashup_jobs=('files' 'mysql');
+
 # directories to be backed up by files
 backup_dirs=('/etc' '/home' '/root' '/srv' '/usr/local' '/var/www');
 

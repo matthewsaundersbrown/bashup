@@ -6,8 +6,8 @@
 Description=Bashup cron for automatic backups
 
 [Timer]
-# Run daily between 3-5 am
-OnCalendar=*-*-* 03:00:00
+# Run daily at a random time between 2:00 and 4:00 am
+OnCalendar=*-*-* 02:00:00
 RandomizedDelaySec=7200
 Unit=bashup-cron.service
 
