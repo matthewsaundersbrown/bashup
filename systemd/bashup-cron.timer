@@ -1,0 +1,15 @@
+# Bashup - A set of bash scripts for managing backups.
+# https://git.stack-source.com/msb/bashup
+# MIT License Copyright (c) 2022 Matthew Saunders Brown
+#
+[Unit]
+Description=Bashup cron for automatic backups
+
+[Timer]
+# Run daily between 3-5 am
+OnCalendar=*-*-* 03:00:00
+RandomizedDelaySec=7200
+Unit=bashup-cron.service
+
+[Install]
+WantedBy=timers.target
