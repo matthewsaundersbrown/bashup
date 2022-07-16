@@ -100,10 +100,9 @@ fi
 # check that dump exists and restore it now
 if [ -d $backup_storage_dir/$backup ]; then
   if [ -f $backup_storage_dir/$backup/pdns/$zone_file ]; then
-    # Still in testing mode, display command instead of running it
-    echo "To restore zone $zone from backup $backup run this command:"
+    echo "running:"
     echo "/usr/bin/pdnsutil load-zone $zone $backup_storage_dir/$backup/pdns/$zone_file"
-#     echo "SUCCESS: Zone $zone from backup $backup has been restored."
+    /usr/bin/pdnsutil load-zone $zone $backup_storage_dir/$backup/pdns/$zone_file
   else
     echo "ERROR: Zone file for zone $zone does not exist in the $backup backup dir."
     exit 1

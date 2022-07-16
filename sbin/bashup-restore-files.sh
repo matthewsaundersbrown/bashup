@@ -124,9 +124,9 @@ if  [[ $verify_back_dir == FALSE ]]; then
 fi
 
 # perform restore
-# Still in testing mode, display command instead of running it
-echo "To restore $pathtorestore from $backup run this command:"
-echo "/usr/bin/rsync -vn --archive --numeric-ids --one-file-system --delete $pathtobackup $pathtorestore"
+echo "Running:"
+echo "/usr/bin/rsync -v --archive --numeric-ids --one-file-system --delete $pathtobackup $pathtorestore"
+/usr/bin/rsync -v --archive --numeric-ids --one-file-system --delete $pathtobackup $pathtorestore
 
 bashup::unmount_storage_dir
 
