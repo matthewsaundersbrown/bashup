@@ -8,11 +8,11 @@ Bashup includes scripts for backing up and restoring Files & Directories, MySQL/
 
 The scripts assume a mountable backup disk (cloud based block storage, NFS mount, dedicated local partion, etc.) but work equally well with a local backup directory. If the backup dir is configured in /etc/fstab as a mountable disk then it will automatically be mounted and then unmounted when the scripts run.
 
-For "files" backups a combination of rsync & hard links is used. This conserves space as files that are unchanged simply reference the same indode instead of having duplicate files.
+For "files" backups a combination of rsync & hard links is used. This conserves space as files that are unchanged simply reference the same inode instead of having duplicate files.
 
 The systemd timer runs the desired "backup" scripts once per day. The scripts can also be run manually. They can be re-run multiple times in one day without any negative repercussions. If an existing backup already exists it is simply skipped, it is not overwritten with a newer copy.
 
-The "restore" scripts can be run interatively. If you do not specify options for the restore then you will be prompted with menus of options to help you select what to restore. If the appropriate options are specified on the command line then the restore will be completed without prompts.
+The "restore" scripts can be run interactively. If you do not specify options for the restore then you will be prompted with menus of options to help you select what to restore. If the appropriate options are specified on the command line then the restore will be completed without prompts.
 
 Built and tested on Ubuntu 20.04 these scripts should run fine on any current Debian or Debian based distro without any modifications. It should be trivial to expand support for other distros too, please contact the author if there is interest in this.
 
