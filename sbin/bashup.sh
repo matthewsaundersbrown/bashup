@@ -19,7 +19,12 @@ backup_storage_dir='/mnt/backups';
 bashup_jobs=('files' 'mysql');
 
 # directories to be backed up by files
-backup_dirs=('/etc' '/home' '/root' '/srv' '/usr/local' '/var/www');
+backup_dirs=('/etc' '/home/' '/root' '/srv/' '/usr/local' '/var/www/');
+# to back up an entire directory do *not* add a trailing slash
+# if you add a trailing slash then instead of backing up that directory itself
+# a list of all subdirectories is generated and added to the array
+# note that with a trailing slash files in the top level directory itself will *not* be backed up,
+# only the subdirectories within it
 
 # mysql config file that contains 'host' 'user' 'password' vars
 defaults_extra_file='/etc/mysql/debian.cnf';
@@ -38,6 +43,27 @@ fi
 if [ "${EUID}" -ne 0 ]; then
   exec sudo -u root --shell /bin/bash $0 $@
 fi
+
+# check backup_dirs for tailing slash (subdir option)
+i=0
+for dir in "${backup_dirs[@]}"; do
+  if grep -qs '/$' <<< "$dir"; then
+    # found match, first remove dir from array
+    unset "backup_dirs[$i]"
+    # check for subdirs
+    if [[ -d $dir ]]; then
+      subdirs=(`ls -1 $dir`)
+      if [[ ${#subdirs[@]} -gt 0 ]]; then
+        for subdir in "${subdirs[@]}"; do
+          if [[ -d "$dir$subdir" ]]; then
+            backup_dirs+=("$dir$subdir")
+          fi
+        done
+      fi
+    fi
+  fi
+  ((i++))
+done
 
 # check for backup storage directory and mount if need be
 if [ -d $backup_storage_dir ]; then
