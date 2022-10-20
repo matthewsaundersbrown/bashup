@@ -30,8 +30,9 @@ cp sbin/bashup*.sh /usr/local/sbin/
 chmod 755 /usr/local/sbin/bashup*.sh
 chown root:root /usr/local/sbin/bashup*.sh
 # install & enable bashup systemd cron
-cp systemd/bashup-cron.* /usr/lib/systemd/system/
-chmod 644 /usr/lib/systemd/system/bashup-cron.*
+mkdir -p /usr/local/lib/systemd/system
+cp systemd/bashup-cron.* /usr/local/lib/systemd/system/
+chmod 644 /usr/local/lib/systemd/system/bashup-cron.*
 systemctl enable bashup-cron.timer
 systemctl start bashup-cron.timer
 # customize configuration
