@@ -23,18 +23,18 @@ if [[ " ${retention_array[@]} " =~ " ${today} " ]]; then
   if [[ ! -d $backup_storage_dir/$today/mysql ]]; then
 
     mkdir $backup_storage_dir/$today/mysql
-    mysqladmin --defaults-extra-file=$defaults_extra_file refresh
+    mysqladmin --defaults-extra-file=$mysql_defaults_extra_file refresh
 
     # create array of all existing databases
-    databases=($(mysql --defaults-extra-file=$defaults_extra_file -E -e 'show databases;'|grep : |awk '{ print $2 }' |tr '\n' ' '));
+    databases=($(mysql --defaults-extra-file=$mysql_defaults_extra_file -E -e 'show databases;'|grep : |awk '{ print $2 }' |tr '\n' ' '));
 
     for database in "${databases[@]}"; do
 
-      if [[ " ${exclusions[@]} " =~ " ${database} " ]]; then
-        # do nothing, db is in exclusions array
+      if [[ " ${mysql_exclusions[@]} " =~ " ${database} " ]]; then
+        # do nothing, db is in mysql_exclusions array
         one=1;
       else
-        mysqldump --defaults-extra-file=$defaults_extra_file --opt --quote-names --events --databases $database | gzip > $backup_storage_dir/$today/mysql/$database.sql.gz
+        mysqldump --defaults-extra-file=$mysql_defaults_extra_file --opt --quote-names --events --databases $database | gzip > $backup_storage_dir/$today/mysql/$database.sql.gz
       fi
 
     done

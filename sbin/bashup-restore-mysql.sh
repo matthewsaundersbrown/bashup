@@ -101,8 +101,8 @@ fi
 if [ -d $backup_storage_dir/$backup ]; then
   if [ -f $backup_storage_dir/$backup/mysql/$dump ]; then
     echo "running:"
-    echo "/usr/bin/zcat $backup_storage_dir/$backup/mysql/$dump | mysql --defaults-extra-file=$defaults_extra_file $database"
-    /usr/bin/zcat $backup_storage_dir/$backup/mysql/$dump | mysql --defaults-extra-file=$defaults_extra_file $database
+    echo "/usr/bin/zcat $backup_storage_dir/$backup/mysql/$dump | mysql --defaults-extra-file=$mysql_defaults_extra_file $database"
+    /usr/bin/zcat $backup_storage_dir/$backup/mysql/$dump | mysql --defaults-extra-file=$mysql_defaults_extra_file $database
   else
     echo "ERROR: Dump for database $database does not exist in the $backup backup dir."
     exit 1

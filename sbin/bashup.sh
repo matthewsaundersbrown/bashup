@@ -15,7 +15,7 @@ retention_days=7;
 # backup storage directory
 backup_storage_dir='/mnt/backups';
 
-# which backup scripts to run via bashup-cron.sh - options are 'files', 'mysql', 'pdns'
+# which backup scripts to run via bashup-cron.sh - options are 'files', 'mysql', 'pdns', 'postgres'
 bashup_jobs=('files' 'mysql');
 
 # directories to be backed up by files
@@ -27,10 +27,20 @@ backup_dirs=('/etc' '/home/' '/root' '/srv/' '/usr/local' '/var/www/');
 # only the subdirectories within it
 
 # mysql config file that contains 'host' 'user' 'password' vars
-defaults_extra_file='/etc/mysql/debian.cnf';
+mysql_defaults_extra_file='/etc/mysql/debian.cnf';
 
 # list of mysql databases to skip
-exclusions=('information_schema' 'performance_schema' 'sys' 'wsrep');
+mysql_exclusions=('information_schema' 'performance_schema' 'sys' 'wsrep');
+
+# postgres backup method - options are 'basebackup', 'dump', 'dumpall'
+# basebackup makes an exact copy of the entire database cluster's files
+# dump creates individual sql dumps of each database
+# dumpall creates a single sql dump of all databases in one file
+# multiple methods can be specified
+pg_method=('basebackup' 'dump');
+
+# list of postgres databases to skip when using method 'dump'
+pg_dump_exclusions=('template0');
 
 # end configurable vars
 
