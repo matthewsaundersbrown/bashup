@@ -58,7 +58,7 @@ if [[ " ${retention_array[@]} " =~ " ${today} " ]]; then
 
 fi
 
-bashup::remove_expired_backups pg
+bashup::remove_expired_backups postgres
 bashup::unmount_storage_dir
 
 exit 0
